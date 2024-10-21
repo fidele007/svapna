@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:svapna/services/dream_service.dart';
 
 import '../models/dream.dart';
+import '../services/dream_service.dart';
+
 import 'dream_detail.dart';
 
 class DreamList extends StatefulWidget {
@@ -13,15 +13,20 @@ class DreamList extends StatefulWidget {
 }
 
 class _DreamListState extends State<DreamList> {
-  List<Dream> dreams = [];
+  final SearchController _searchController = SearchController();
+
+  late final List<Dream> _allDreams;
+  List<Dream> _filteredDreams = [];
 
   @override
   void initState() {
     super.initState();
 
-    DreamService.dreams.then((value) {
+    DreamService.dreams.then((completeDreamList) {
       setState(() {
-        dreams = value;
+        _allDreams = completeDreamList;
+        _filteredDreams =
+            filterDreams(completeDreamList, _searchController.text.trim());
       });
     });
   }
@@ -40,25 +45,73 @@ class _DreamListState extends State<DreamList> {
         title: const Text('សប្តិ — Svapna'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: ListView.builder(
-        itemCount: dreams.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-              dreams[index].name,
-              style: listTitleStyle,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SearchAnchor.bar(
+              onSubmitted: (value) {
+                final filteredDreams = filterDreams(_allDreams, value);
+                setState(() {
+                  _filteredDreams = filteredDreams;
+                  if (value.isNotEmpty) {
+                    _searchController.closeView(value);
+                  }
+                });
+              },
+              searchController: _searchController,
+              barHintText: 'ស្វែងរកសុបិន',
+              // barPadding: const WidgetStatePropertyAll<EdgeInsets>(
+              //     EdgeInsets.symmetric(horizontal: 16)),
+              suggestionsBuilder: (context, controller) {
+                return filterDreams(_allDreams, controller.text.trim())
+                    .map((dream) => ListTile(
+                          title: Text(dream.name),
+                          onTap: () {
+                            onDreamTap(dream);
+                          },
+                        ))
+                    .toList();
+              },
             ),
-            subtitle: Text(
-              dreams[index].plainTextDefinition ?? '',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: listSubtitleStyle,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _filteredDreams.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    _filteredDreams[index].name,
+                    style: listTitleStyle,
+                  ),
+                  subtitle: Text(
+                    _filteredDreams[index].plainTextDefinition ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: listSubtitleStyle,
+                  ),
+                  onTap: () => onDreamTap(_filteredDreams[index]),
+                );
+              },
             ),
-            onTap: () => onDreamTap(dreams[index]),
-          );
-        },
+          ),
+        ],
       ),
     );
+  }
+
+  static List<Dream> filterDreams(List<Dream> dreamList, String query) {
+    if (query.isEmpty || query.trim().isEmpty) {
+      return dreamList;
+    }
+
+    final filteredDreams = dreamList
+        .where((dream) => dream.name.toUpperCase().contains(
+              query.toUpperCase(),
+            ))
+        .toList();
+
+    return filteredDreams;
   }
 
   void onDreamTap(Dream dream) {

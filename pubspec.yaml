@@ -94,6 +94,7 @@ flutter:
       fonts:
         - asset: assets/fonts/KantumruyPro-Regular.ttf
           weight: 400
+          style: normal
         - asset: assets/fonts/KantumruyPro-Bold.ttf
           weight: 700
         - asset: assets/fonts/KantumruyPro-Italic.ttf
