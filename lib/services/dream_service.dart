@@ -1,29 +1,40 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../models/dream.dart';
 
 class DreamService {
-  static List<Dream>? _dreams;
+  static final Map<String, List<Dream>> _dreams = {};
 
-  static Future<List<Dream>> get dreams async {
-    if (_dreams != null && _dreams!.isNotEmpty) {
-      return _dreams!;
+  static Future<List<Dream>> getDreams(String languageCode) async {
+    if (_dreams[languageCode] != null) {
+      return _dreams[languageCode]!;
     }
 
-    final String dreamsJsonString =
-        await rootBundle.loadString('assets/dreams_kh.json');
+    String dreamsJsonString;
+    try {
+      dreamsJsonString =
+          await rootBundle.loadString('assets/dreams_$languageCode.json');
+    } catch (e) {
+      debugPrint(
+          'Error loading dreams for $languageCode: $e. Falling back to default dreams.');
+      dreamsJsonString = await rootBundle.loadString('assets/dreams_en.json');
+    }
+
     final dreamsJson = jsonDecode(dreamsJsonString);
-    _dreams = [];
+    final List<Dream> dreams = [];
     for (var dream in dreamsJson['words']) {
-      _dreams!.add(Dream(
+      dreams.add(Dream(
         id: dream['id'],
         name: dream['name'],
         definition: dream['definition'],
       ));
     }
 
-    return _dreams!;
+    _dreams[languageCode] = dreams;
+
+    return dreams;
   }
 }

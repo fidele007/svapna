@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:svapna/l10n/app_localizations.dart';
+import 'package:svapna/models/language.dart';
 
 import '../models/dream.dart';
 import '../services/dream_service.dart';
@@ -15,14 +18,21 @@ class DreamList extends StatefulWidget {
 class _DreamListState extends State<DreamList> {
   final SearchController _searchController = SearchController();
 
-  late final List<Dream> _allDreams;
+  final double minSearchBarHeight = 50.0;
+
+  List<Dream> _allDreams = [];
   List<Dream> _filteredDreams = [];
 
   @override
   void initState() {
     super.initState();
 
-    DreamService.dreams.then((completeDreamList) {
+    loadDreams();
+  }
+
+  void loadDreams() {
+    final languageCode = context.read<LanguageProvider>().locale.languageCode;
+    DreamService.getDreams(languageCode).then((completeDreamList) {
       setState(() {
         _allDreams = completeDreamList;
         _filteredDreams =
@@ -40,39 +50,67 @@ class _DreamListState extends State<DreamList> {
 
     final listSubtitleStyle = Theme.of(context).textTheme.bodyLarge;
 
+    const isRunningWithWasm = bool.fromEnvironment('dart.tool.dart2wasm');
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('សប្តិ — Svapna'),
+        title: const Text('សប្តិ — Svapna (WASM: $isRunningWithWasm)'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SearchAnchor.bar(
-              onSubmitted: (value) {
-                final filteredDreams = filterDreams(_allDreams, value);
-                setState(() {
-                  _filteredDreams = filteredDreams;
-                  if (value.isNotEmpty) {
-                    _searchController.closeView(value);
-                  }
-                });
-              },
-              searchController: _searchController,
-              barHintText: 'ស្វែងរកសុបិន',
-              // barPadding: const WidgetStatePropertyAll<EdgeInsets>(
-              //     EdgeInsets.symmetric(horizontal: 16)),
-              suggestionsBuilder: (context, controller) {
-                return filterDreams(_allDreams, controller.text.trim())
-                    .map((dream) => ListTile(
-                          title: Text(dream.name),
-                          onTap: () {
-                            onDreamTap(dream);
-                          },
-                        ))
-                    .toList();
-              },
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: [
+                SearchAnchor.bar(
+                  constraints: BoxConstraints(
+                    minWidth: 0,
+                    maxWidth: 600.0,
+                    minHeight: minSearchBarHeight,
+                  ),
+                  onSubmitted: (value) {
+                    final filteredDreams = filterDreams(_allDreams, value);
+                    setState(() {
+                      _filteredDreams = filteredDreams;
+                      if (value.isNotEmpty) {
+                        _searchController.closeView(value);
+                      }
+                    });
+                  },
+                  searchController: _searchController,
+                  barHintText: AppLocalizations.of(context)!.searchDreams,
+                  // barPadding: const WidgetStatePropertyAll<EdgeInsets>(
+                  //     EdgeInsets.symmetric(horizontal: 16)),
+                  suggestionsBuilder: (context, controller) {
+                    return filterDreams(_allDreams, controller.text.trim())
+                        .map((dream) => ListTile(
+                              title: Text(dream.name),
+                              onTap: () {
+                                onDreamTap(dream);
+                              },
+                            ))
+                        .toList();
+                  },
+                ),
+                FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    minimumSize: Size(125, minSearchBarHeight + 5),
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(12.0),
+                    // ),
+                  ),
+                  onPressed: onLangButtonPressed,
+                  icon: const Icon(Icons.translate_rounded),
+                  label: Text(
+                    context.read<LanguageProvider>().nextLocale.displayName,
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -121,5 +159,11 @@ class _DreamListState extends State<DreamList> {
         builder: (context) => DreamDetail(dream: dream),
       ),
     );
+  }
+
+  void onLangButtonPressed() {
+    final languageProvider = context.read<LanguageProvider>();
+    languageProvider.setLocale(languageProvider.nextLocale);
+    loadDreams();
   }
 }
