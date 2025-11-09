@@ -18,7 +18,7 @@ import 'app_localizations_km.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'l10n/app_localizations.dart';
+/// import 'i18n/app_localizations.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -143,6 +143,12 @@ abstract class AppLocalizations {
   /// **'Search Dreams'**
   String get searchDreams;
 
+  /// No description provided for @searchEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No dreams found — maybe they’re still asleep... 😴'**
+  String get searchEmpty;
+
   /// No description provided for @about.
   ///
   /// In en, this message translates to:
@@ -160,6 +166,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This app makes it easy to explore the meanings and interpretations of your dreams, with a comprehensive collection of over 20,000 dream definitions.'**
   String get aboutApp2;
+
+  /// No description provided for @developedWithBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Developed with 💖 by Force Fidele KIEN'**
+  String get developedWithBy;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

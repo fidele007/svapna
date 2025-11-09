@@ -33,6 +33,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchDreams => 'Search Dreams';
 
   @override
+  String get searchEmpty => 'No dreams found — maybe they’re still asleep... 😴';
+
+  @override
   String get about => 'About';
 
   @override
@@ -40,4 +43,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutApp2 => 'This app makes it easy to explore the meanings and interpretations of your dreams, with a comprehensive collection of over 20,000 dream definitions.';
+
+  @override
+  String get developedWithBy => 'Developed with 💖 by Force Fidele KIEN';
 }

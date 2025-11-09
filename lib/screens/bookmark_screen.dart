@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:svapna/l10n/app_localizations.dart';
+import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
 import 'package:svapna/providers/bookmarks_provider.dart';
 import 'package:svapna/styles/styles.dart';

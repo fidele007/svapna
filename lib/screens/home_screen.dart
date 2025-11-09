@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:svapna/l10n/app_localizations.dart';
+import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
 import 'package:svapna/models/language.dart';
 import 'package:svapna/providers/language_provider.dart';
@@ -116,24 +116,28 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _filteredDreams.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    _filteredDreams[index].name,
-                    style: AppStyle.listTitleStyle(context),
+            child: _filteredDreams.isEmpty
+                ? Center(
+                    child: Text(AppLocalizations.of(context)!.searchEmpty),
+                  )
+                : ListView.builder(
+                    itemCount: _filteredDreams.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                          _filteredDreams[index].name,
+                          style: AppStyle.listTitleStyle(context),
+                        ),
+                        subtitle: Text(
+                          _filteredDreams[index].plainTextDefinition ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyle.listSubtitleStyle(context),
+                        ),
+                        onTap: () => onDreamTap(_filteredDreams[index]),
+                      );
+                    },
                   ),
-                  subtitle: Text(
-                    _filteredDreams[index].plainTextDefinition ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppStyle.listSubtitleStyle(context),
-                  ),
-                  onTap: () => onDreamTap(_filteredDreams[index]),
-                );
-              },
-            ),
           ),
         ],
       ),

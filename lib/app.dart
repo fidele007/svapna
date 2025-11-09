@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:svapna/l10n/app_localizations.dart';
+import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/screens/about_screen.dart';
 import 'package:svapna/screens/bookmark_screen.dart';
 import 'package:svapna/screens/home_screen.dart';

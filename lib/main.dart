@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 import 'package:svapna/app.dart';
-import 'package:svapna/l10n/app_localizations.dart';
+import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/providers/bookmarks_provider.dart';
 import 'package:svapna/providers/history_provider.dart';
 import 'package:svapna/providers/language_provider.dart';

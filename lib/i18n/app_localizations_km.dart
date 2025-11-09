@@ -33,6 +33,9 @@ class AppLocalizationsKm extends AppLocalizations {
   String get searchDreams => 'ស្វែងរកសុបិន';
 
   @override
+  String get searchEmpty => 'រកមិនឃើញសុបិន។ ប្រហែលនៅដេកមិនទាន់ភ្ញាក់ទេ... 😴';
+
+  @override
   String get about => 'អំពីកម្មវិធី';
 
   @override
@@ -40,4 +43,7 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get aboutApp2 => 'កម្មវិធី កាត់សុបិន គឺជាកម្មវិធីដែលផ្ដល់ភាពងាយស្រួលដល់អ្នក ក្នុងការស្វែងរកអត្ថន័យនិងសុបិនរបស់អ្នក។ កម្មវិធីនេះប្រមូលផ្ដុំអត្ថន័យជាង ២០០០០ អត្ថន័យ។';
+
+  @override
+  String get developedWithBy => 'បង្កើតជាមួយ 💖 ដោយ គៀន ហ្វកហ្វីដែល';
 }
