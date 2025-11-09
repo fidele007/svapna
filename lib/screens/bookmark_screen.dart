@@ -28,7 +28,6 @@ class _BookmarkScreenState extends State<BookmarkScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.bookmarks),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Consumer<BookmarksProvider>(
         builder: (context, bookmarksProvider, child) {

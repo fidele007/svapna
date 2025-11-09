@@ -28,7 +28,6 @@ class _HistoryScreenState extends State<HistoryScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.history),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Consumer<HistoryProvider>(
         builder: (context, historyProvider, child) {

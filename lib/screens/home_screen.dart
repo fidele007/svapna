@@ -52,12 +52,9 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    const isRunningWithWasm = bool.fromEnvironment('dart.tool.dart2wasm');
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('សប្តិ — Svapna (WASM: $isRunningWithWasm)'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text('សប្តិ — Svapna'),
       ),
       body: Column(
         children: [

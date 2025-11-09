@@ -7,6 +7,8 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const isRunningWithWasm = bool.fromEnvironment('dart.tool.dart2wasm');
+
     return Scaffold(
       body: Center(
         child: Padding(
@@ -18,7 +20,7 @@ class AboutScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               Text(
-                'v1.0.0',
+                'v1.0.0 (WASM: $isRunningWithWasm)',
                 // style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 16.0),
