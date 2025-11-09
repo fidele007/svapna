@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+
 import 'package:svapna/l10n/app_localizations.dart';
+import 'package:svapna/models/dream.dart';
 import 'package:svapna/models/language.dart';
+import 'package:svapna/providers/language_provider.dart';
+import 'package:svapna/services/dream_service.dart';
+import 'package:svapna/styles/styles.dart';
 
-import '../models/dream.dart';
-import '../services/dream_service.dart';
+import 'dream_detail_screen.dart';
 
-import 'dream_detail.dart';
-
-class DreamList extends StatefulWidget {
-  const DreamList({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<DreamList> createState() => _DreamListState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _DreamListState extends State<DreamList> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final SearchController _searchController = SearchController();
 
   final double minSearchBarHeight = 50.0;
@@ -43,12 +50,7 @@ class _DreamListState extends State<DreamList> {
 
   @override
   Widget build(BuildContext context) {
-    final listTitleStyle = Theme.of(context)
-        .textTheme
-        .bodyLarge!
-        .copyWith(fontWeight: FontWeight.bold);
-
-    final listSubtitleStyle = Theme.of(context).textTheme.bodyLarge;
+    super.build(context);
 
     const isRunningWithWasm = bool.fromEnvironment('dart.tool.dart2wasm');
 
@@ -120,13 +122,13 @@ class _DreamListState extends State<DreamList> {
                 return ListTile(
                   title: Text(
                     _filteredDreams[index].name,
-                    style: listTitleStyle,
+                    style: AppStyle.listTitleStyle(context),
                   ),
                   subtitle: Text(
                     _filteredDreams[index].plainTextDefinition ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: listSubtitleStyle,
+                    style: AppStyle.listSubtitleStyle(context),
                   ),
                   onTap: () => onDreamTap(_filteredDreams[index]),
                 );
@@ -156,7 +158,7 @@ class _DreamListState extends State<DreamList> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DreamDetail(dream: dream),
+        builder: (context) => DreamDetailScreen(dream: dream),
       ),
     );
   }

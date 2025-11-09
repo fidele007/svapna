@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+
+import 'package:svapna/app.dart';
 import 'package:svapna/l10n/app_localizations.dart';
-import 'package:svapna/models/language.dart';
-import 'package:svapna/screens/dream_list.dart';
+import 'package:svapna/providers/bookmarks_provider.dart';
+import 'package:svapna/providers/history_provider.dart';
+import 'package:svapna/providers/language_provider.dart';
 
 void main() async {
   await GetStorage.init();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => LanguageProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryProvider()),
+        ChangeNotifierProvider(create: (_) => BookmarksProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -34,12 +42,13 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: LanguageProvider.supportedLocales,
+      themeMode: ThemeMode.system,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         fontFamily: 'Kantumruy Pro',
       ),
-      home: const DreamList(),
+      home: const App(),
     );
   }
 }

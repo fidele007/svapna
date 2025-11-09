@@ -9,5 +9,35 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get appName => 'Svapna';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get history => 'Recent';
+
+  @override
+  String get historyEmpty => 'Your dream journal is quiet tonight.';
+
+  @override
+  String get bookmarks => 'Bookmarks';
+
+  @override
+  String get bookmarksEmpty => 'Your dream shelf is empty. Go catch a few to keep!';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
   String get searchDreams => 'Search Dreams';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get aboutApp1 => 'Dreams are often seen as a form of prophecy, revealing insights about one’s life after waking and even foreshadowing future events. They play an important role in daily life, often serving as guiding signs that help people make thoughtful decisions before taking action.';
+
+  @override
+  String get aboutApp2 => 'This app makes it easy to explore the meanings and interpretations of your dreams, with a comprehensive collection of over 20,000 dream definitions.';
 }

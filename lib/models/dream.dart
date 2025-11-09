@@ -14,4 +14,20 @@ class Dream {
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim();
   }
+
+  toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'definition': definition,
+    };
+  }
+
+  static Dream fromJson(Map<String, dynamic> dreamJson) {
+    return Dream(
+      id: dreamJson['id'],
+      name: dreamJson['name'],
+      definition: dreamJson['definition'],
+    );
+  }
 }
