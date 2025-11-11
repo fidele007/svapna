@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'package:package_info_plus/package_info_plus.dart';
+
 import 'package:svapna/i18n/app_localizations.dart';
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  String? _version;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadVersion();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +38,7 @@ class AboutScreen extends StatelessWidget {
                     ),
               ),
               Text(
-                'v1.0.0 (WASM: $isRunningWithWasm)',
+                'v$_version (WASM: $isRunningWithWasm)',
                 // style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 16.0),
@@ -42,5 +58,12 @@ class AboutScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _loadVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _version = '${info.version}+${info.buildNumber}';
+    });
   }
 }
