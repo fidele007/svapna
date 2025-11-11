@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'dream.dart';
 
 class Pref {
+  static final theme = 'light'.val('theme');
   static final language = 'kh'.val('language');
 
   static final Pref instance = Pref();

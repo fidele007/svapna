@@ -6,6 +6,7 @@ import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
 import 'package:svapna/models/language.dart';
 import 'package:svapna/providers/language_provider.dart';
+import 'package:svapna/providers/theme_provider.dart';
 import 'package:svapna/services/dream_service.dart';
 import 'package:svapna/styles/styles.dart';
 
@@ -30,9 +31,14 @@ class _HomeScreenState extends State<HomeScreen>
   List<Dream> _allDreams = [];
   List<Dream> _filteredDreams = [];
 
+  late bool _isDark;
+
   @override
   void initState() {
     super.initState();
+
+    _isDark = Provider.of<ThemeProvider>(context, listen: false).currentTheme ==
+        ThemeMode.dark;
 
     loadDreams();
   }
@@ -55,6 +61,20 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text('សប្តិ — Svapna'),
+        actions: [
+          Icon(Icons.light_mode_outlined),
+          Switch.adaptive(
+            value: _isDark,
+            onChanged: (bool isDark) {
+              Provider.of<ThemeProvider>(context, listen: false)
+                  .setTheme(isDark ? ThemeMode.dark : ThemeMode.light);
+              setState(() {
+                _isDark = isDark;
+              });
+            },
+          ),
+          Icon(Icons.dark_mode_outlined)
+        ],
       ),
       body: Column(
         children: [
@@ -106,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen>
                   onPressed: onLangButtonPressed,
                   icon: const Icon(Icons.translate_rounded),
                   label: Text(
-                    context.read<LanguageProvider>().nextLocale.displayName,
+                    context.read<LanguageProvider>().locale.displayName,
                   ),
                 ),
               ],

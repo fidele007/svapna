@@ -9,12 +9,14 @@ import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/providers/bookmarks_provider.dart';
 import 'package:svapna/providers/history_provider.dart';
 import 'package:svapna/providers/language_provider.dart';
+import 'package:svapna/providers/theme_provider.dart';
 
 void main() async {
   await GetStorage.init();
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
         ChangeNotifierProvider(create: (_) => BookmarksProvider()),
@@ -42,10 +44,17 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: LanguageProvider.supportedLocales,
-      themeMode: ThemeMode.system,
+      themeMode: Provider.of<ThemeProvider>(context).currentTheme,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        colorSchemeSeed: Colors.deepPurple,
+        fontFamily: 'Kantumruy Pro',
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        colorSchemeSeed: Colors.deepPurple,
         fontFamily: 'Kantumruy Pro',
       ),
       home: const App(),
