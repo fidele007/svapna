@@ -46,4 +46,19 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get developedWithBy => 'បង្កើតជាមួយ 💖 ដោយ គៀន ហ្វកហ្វីដែល';
+
+  @override
+  String get theme => 'ពណ៌';
+
+  @override
+  String get system => 'តាមប្រព័ន្ធ';
+
+  @override
+  String get light => 'ភ្លឺ';
+
+  @override
+  String get dark => 'ងងឹត';
+
+  @override
+  String get language => 'ភាសា';
 }

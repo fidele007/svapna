@@ -6,7 +6,7 @@ class AppStyle {
     return Theme.of(context)
         .textTheme
         .bodyLarge!
-        .copyWith(fontWeight: FontWeight.bold);
+        .copyWith(fontWeight: FontWeight.w600);
   }
 
   static TextStyle? listSubtitleStyle(BuildContext context) {

@@ -4,11 +4,10 @@ import 'package:provider/provider.dart';
 
 import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
-import 'package:svapna/models/language.dart';
 import 'package:svapna/providers/language_provider.dart';
-import 'package:svapna/providers/theme_provider.dart';
 import 'package:svapna/services/dream_service.dart';
 import 'package:svapna/styles/styles.dart';
+import 'package:svapna/widgets/customized_app_bar.dart';
 
 import 'dream_detail_screen.dart';
 
@@ -31,16 +30,18 @@ class _HomeScreenState extends State<HomeScreen>
   List<Dream> _allDreams = [];
   List<Dream> _filteredDreams = [];
 
-  late bool _isDark;
+  LanguageProvider? languageProvider;
 
   @override
   void initState() {
     super.initState();
 
-    _isDark = Provider.of<ThemeProvider>(context, listen: false).currentTheme ==
-        ThemeMode.dark;
-
     loadDreams();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      languageProvider = context.read<LanguageProvider>();
+      languageProvider!.addListener(onLanguageChanged);
+    });
   }
 
   void loadDreams() {
@@ -59,22 +60,11 @@ class _HomeScreenState extends State<HomeScreen>
     super.build(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('សប្តិ — Svapna'),
-        actions: [
-          Icon(Icons.light_mode_outlined),
-          Switch.adaptive(
-            value: _isDark,
-            onChanged: (bool isDark) {
-              Provider.of<ThemeProvider>(context, listen: false)
-                  .setTheme(isDark ? ThemeMode.dark : ThemeMode.light);
-              setState(() {
-                _isDark = isDark;
-              });
-            },
-          ),
-          Icon(Icons.dark_mode_outlined)
-        ],
+      appBar: CustomizedAppBar(
+        title: Text(
+          'សប្តិ — Svapna',
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
       ),
       body: Column(
         children: [
@@ -115,19 +105,6 @@ class _HomeScreenState extends State<HomeScreen>
                             ))
                         .toList();
                   },
-                ),
-                FilledButton.icon(
-                  style: FilledButton.styleFrom(
-                    minimumSize: Size(125, minSearchBarHeight + 5),
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(12.0),
-                    // ),
-                  ),
-                  onPressed: onLangButtonPressed,
-                  icon: const Icon(Icons.translate_rounded),
-                  label: Text(
-                    context.read<LanguageProvider>().locale.displayName,
-                  ),
                 ),
               ],
             ),
@@ -184,9 +161,15 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  void onLangButtonPressed() {
-    final languageProvider = context.read<LanguageProvider>();
-    languageProvider.setLocale(languageProvider.nextLocale);
+  void onLanguageChanged() {
     loadDreams();
+  }
+
+  @override
+  void dispose() {
+    languageProvider?.removeListener(onLanguageChanged);
+    languageProvider?.dispose();
+
+    super.dispose();
   }
 }

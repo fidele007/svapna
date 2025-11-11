@@ -46,4 +46,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get developedWithBy => 'Developed with 💖 by Force Fidele KIEN';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get language => 'Language';
 }

@@ -17,16 +17,24 @@ class AboutScreen extends StatelessWidget {
             children: [
               Text(
                 'សប្តិ — Svapna',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
               Text(
                 'v1.0.0 (WASM: $isRunningWithWasm)',
                 // style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 16.0),
-              Text(AppLocalizations.of(context)!.aboutApp1),
+              Text(
+                AppLocalizations.of(context)!.aboutApp1,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
               const SizedBox(height: 8.0),
-              Text(AppLocalizations.of(context)!.aboutApp2),
+              Text(
+                AppLocalizations.of(context)!.aboutApp2,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
               Spacer(),
               Text(AppLocalizations.of(context)!.developedWithBy),
             ],

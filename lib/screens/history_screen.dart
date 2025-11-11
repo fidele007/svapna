@@ -6,6 +6,7 @@ import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
 import 'package:svapna/providers/history_provider.dart';
 import 'package:svapna/styles/styles.dart';
+import 'package:svapna/widgets/customized_app_bar.dart';
 
 import 'dream_detail_screen.dart';
 
@@ -26,8 +27,11 @@ class _HistoryScreenState extends State<HistoryScreen>
     super.build(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.history),
+      appBar: CustomizedAppBar(
+        title: Text(
+          AppLocalizations.of(context)!.history,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
       ),
       body: Consumer<HistoryProvider>(
         builder: (context, historyProvider, child) {
