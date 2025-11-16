@@ -59,12 +59,16 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    final isWide = MediaQuery.of(context).size.width >= 850;
+
     return Scaffold(
       appBar: SharedAppBar(
-        title: Text(
-          'សប្តិ — Svapna',
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        title: isWide
+            ? null
+            : Text(
+                'សប្តិ — Svapna',
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
       ),
       body: Column(
         children: [

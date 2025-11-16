@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
+
 import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/screens/about_screen.dart';
 import 'package:svapna/screens/bookmark_screen.dart';
@@ -35,14 +37,38 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width >= 850;
+    final shouldExtend = MediaQuery.of(context).size.width >= 1500;
 
     return Scaffold(
       body: Row(
         children: [
           if (isWide)
             NavigationRail(
+              extended: shouldExtend,
+              minExtendedWidth: 250,
+              leading: Wrap(
+                spacing: 5.0,
+                crossAxisAlignment: WrapCrossAlignment.end,
+                children: [
+                  SvgPicture.asset(
+                    'assets/svapna.svg',
+                    width: 45,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  if (shouldExtend)
+                    Text(
+                      AppLocalizations.of(context)!.appName,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                ],
+              ),
               useIndicator: true,
-              labelType: NavigationRailLabelType.all,
+              labelType: shouldExtend
+                  ? NavigationRailLabelType.none
+                  : NavigationRailLabelType.all,
               destinations: <NavigationRailDestination>[
                 NavigationRailDestination(
                   icon: Icon(Icons.home_outlined),

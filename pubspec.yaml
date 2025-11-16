@@ -43,6 +43,7 @@ dependencies:
   intl: any
   package_info_plus: ^9.0.0
   shared_preferences: ^2.5.3
+  flutter_svg: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,7 @@ flutter:
   assets:
     - assets/dreams_en.json
     - assets/dreams_km.json
+    - assets/svapna.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

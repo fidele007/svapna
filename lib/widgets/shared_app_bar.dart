@@ -8,9 +8,9 @@ import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/providers/theme_provider.dart';
 
 class SharedAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final Widget title;
+  final Widget? title;
 
-  const SharedAppBar({super.key, required this.title});
+  const SharedAppBar({super.key, this.title});
 
   @override
   State<SharedAppBar> createState() => _SharedAppBarState();
