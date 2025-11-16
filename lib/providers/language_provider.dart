@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:svapna/models/pref.dart';
+import 'package:svapna/models/shared_prefs.dart';
 
 class LanguageProvider extends ChangeNotifier {
   static List<Locale> get supportedLocales => const [
@@ -9,7 +9,7 @@ class LanguageProvider extends ChangeNotifier {
       ];
 
   Locale _locale = supportedLocales.firstWhere(
-    (x) => x.languageCode == Pref.language.val,
+    (x) => x.languageCode == SharedPrefs.instance.language,
     orElse: () => supportedLocales.first,
   );
 
@@ -25,7 +25,7 @@ class LanguageProvider extends ChangeNotifier {
     }
 
     _locale = locale;
-    Pref.language.val = locale.languageCode;
+    SharedPrefs.instance.language = locale.languageCode;
     notifyListeners();
   }
 }

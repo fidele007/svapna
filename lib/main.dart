@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 import 'package:svapna/app.dart';
 import 'package:svapna/i18n/app_localizations.dart';
+import 'package:svapna/models/shared_prefs.dart';
 import 'package:svapna/providers/bookmarks_provider.dart';
 import 'package:svapna/providers/history_provider.dart';
 import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/providers/theme_provider.dart';
 
 void main() async {
-  await GetStorage.init();
+  await SharedPrefs.init();
   runApp(
     MultiProvider(
       providers: [

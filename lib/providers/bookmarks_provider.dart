@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:svapna/models/dream.dart';
-import 'package:svapna/models/pref.dart';
+import 'package:svapna/models/shared_prefs.dart';
 
 class BookmarksProvider extends ChangeNotifier {
-  List<Dream> get bookmarks => Pref.instance.getBookmarks();
+  List<Dream> get bookmarks => SharedPrefs.instance.getBookmarks();
 
-  void addBookmark(Dream dream) {
-    Pref.instance.addBookmark(dream);
+  Future<void> addBookmark(Dream dream) async {
+    await SharedPrefs.instance.addBookmark(dream);
     notifyListeners();
   }
 
-  void removeBookmark(Dream dream) {
-    Pref.instance.removeBookmark(dream);
+  Future<void> removeBookmark(Dream dream) async {
+    await SharedPrefs.instance.removeBookmark(dream);
     notifyListeners();
   }
 }

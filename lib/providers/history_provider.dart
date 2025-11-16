@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:svapna/models/dream.dart';
-import 'package:svapna/models/pref.dart';
+import 'package:svapna/models/shared_prefs.dart';
 
 class HistoryProvider extends ChangeNotifier {
-  List<Dream> get history => Pref.instance.getHistory();
+  List<Dream> get history => SharedPrefs.instance.getHistory();
 
-  void addHistory(Dream dream) {
-    Pref.instance.addHistory(dream);
+  Future<void> addHistory(Dream dream) async {
+    await SharedPrefs.instance.addHistory(dream);
     notifyListeners();
   }
 }

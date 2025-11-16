@@ -7,7 +7,7 @@ import 'package:svapna/models/dream.dart';
 import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/services/dream_service.dart';
 import 'package:svapna/styles/styles.dart';
-import 'package:svapna/widgets/customized_app_bar.dart';
+import 'package:svapna/widgets/shared_app_bar.dart';
 
 import 'dream_detail_screen.dart';
 
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.build(context);
 
     return Scaffold(
-      appBar: CustomizedAppBar(
+      appBar: SharedAppBar(
         title: Text(
           'សប្តិ — Svapna',
           style: const TextStyle(fontWeight: FontWeight.w600),

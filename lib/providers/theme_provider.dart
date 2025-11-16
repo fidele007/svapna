@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:svapna/models/pref.dart';
+import 'package:svapna/models/shared_prefs.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  ThemeMode currentTheme = getThemeModeFromString(Pref.theme.val);
+  ThemeMode currentTheme = getThemeModeFromString(SharedPrefs.instance.theme);
 
   setTheme(ThemeMode theme) {
     switch (theme) {
       case ThemeMode.system:
-        Pref.theme.val = 'system';
+        SharedPrefs.instance.theme = 'system';
       case ThemeMode.light:
-        Pref.theme.val = 'light';
+        SharedPrefs.instance.theme = 'light';
       case ThemeMode.dark:
-        Pref.theme.val = 'dark';
+        SharedPrefs.instance.theme = 'dark';
     }
     currentTheme = theme;
 

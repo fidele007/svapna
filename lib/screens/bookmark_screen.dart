@@ -6,7 +6,7 @@ import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
 import 'package:svapna/providers/bookmarks_provider.dart';
 import 'package:svapna/styles/styles.dart';
-import 'package:svapna/widgets/customized_app_bar.dart';
+import 'package:svapna/widgets/shared_app_bar.dart';
 
 import 'dream_detail_screen.dart';
 
@@ -27,7 +27,7 @@ class _BookmarkScreenState extends State<BookmarkScreen>
     super.build(context);
 
     return Scaffold(
-      appBar: CustomizedAppBar(
+      appBar: SharedAppBar(
         title: Text(
           AppLocalizations.of(context)!.bookmarks,
           style: const TextStyle(fontWeight: FontWeight.w600),

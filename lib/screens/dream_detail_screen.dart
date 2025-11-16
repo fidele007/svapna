@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:svapna/models/dream.dart';
-import 'package:svapna/models/pref.dart';
+import 'package:svapna/models/shared_prefs.dart';
 import 'package:svapna/providers/bookmarks_provider.dart';
 import 'package:svapna/providers/history_provider.dart';
 
@@ -25,7 +25,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen> {
   void initState() {
     super.initState();
 
-    isBookmarked = Pref.instance.isDreamBookmarked(widget.dream);
+    isBookmarked = SharedPrefs.instance.isDreamBookmarked(widget.dream);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<HistoryProvider>(context, listen: false)
@@ -46,12 +46,12 @@ class _DreamDetailScreenState extends State<DreamDetailScreen> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
+              onPressed: () async {
                 if (isBookmarked) {
-                  Provider.of<BookmarksProvider>(context, listen: false)
+                  await Provider.of<BookmarksProvider>(context, listen: false)
                       .removeBookmark(widget.dream);
                 } else {
-                  Provider.of<BookmarksProvider>(context, listen: false)
+                  await Provider.of<BookmarksProvider>(context, listen: false)
                       .addBookmark(widget.dream);
                 }
                 setState(() {

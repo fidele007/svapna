@@ -7,19 +7,19 @@ import 'package:svapna/models/language.dart';
 import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/providers/theme_provider.dart';
 
-class CustomizedAppBar extends StatefulWidget implements PreferredSizeWidget {
+class SharedAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget title;
 
-  const CustomizedAppBar({super.key, required this.title});
+  const SharedAppBar({super.key, required this.title});
 
   @override
-  State<CustomizedAppBar> createState() => _CustomizedAppBarState();
+  State<SharedAppBar> createState() => _SharedAppBarState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _CustomizedAppBarState extends State<CustomizedAppBar> {
+class _SharedAppBarState extends State<SharedAppBar> {
   late ThemeMode _currentThemeMode;
 
   @override
