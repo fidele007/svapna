@@ -41,7 +41,7 @@ class SharedPrefs {
   String? get theme => _prefsWithCache!.getString(_themeKey) ?? 'system';
   set theme(String? value) => _prefsWithCache!.setString(_themeKey, value!);
 
-  String? get language => _prefsWithCache!.getString(_languageKey) ?? 'km';
+  String? get language => _prefsWithCache!.getString(_languageKey) ?? 'en';
   set language(String? value) =>
       _prefsWithCache!.setString(_languageKey, value!);
 
