@@ -29,6 +29,8 @@ class _BookmarkScreenState extends State<BookmarkScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    final isWide = MediaQuery.of(context).size.width >= 850;
+
     return Scaffold(
       appBar: SearchAppBar(
         searchController: _searchController,
@@ -36,15 +38,16 @@ class _BookmarkScreenState extends State<BookmarkScreen>
           crossAxisAlignment: WrapCrossAlignment.end,
           spacing: 8.0,
           children: [
-            SvgPicture.asset(
-              'assets/svapna.svg',
-              width: 40,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
-                BlendMode.srcIn,
+            if (!isWide)
+              SvgPicture.asset(
+                'assets/svapna.svg',
+                width: 40,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primary,
+                  BlendMode.srcIn,
+                ),
+                semanticsLabel: AppLocalizations.of(context)!.appName,
               ),
-              semanticsLabel: AppLocalizations.of(context)!.appName,
-            ),
             Text(
               AppLocalizations.of(context)!.bookmarks,
               style: const TextStyle(fontWeight: FontWeight.w600),

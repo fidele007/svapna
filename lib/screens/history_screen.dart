@@ -28,6 +28,8 @@ class _HistoryScreenState extends State<HistoryScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    final isWide = MediaQuery.of(context).size.width >= 850;
+
     return Scaffold(
       appBar: SearchAppBar(
         searchController: _searchController,
@@ -35,15 +37,16 @@ class _HistoryScreenState extends State<HistoryScreen>
           crossAxisAlignment: WrapCrossAlignment.end,
           spacing: 8.0,
           children: [
-            SvgPicture.asset(
-              'assets/svapna.svg',
-              width: 40,
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
-                BlendMode.srcIn,
+            if (!isWide)
+              SvgPicture.asset(
+                'assets/svapna.svg',
+                width: 40,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primary,
+                  BlendMode.srcIn,
+                ),
+                semanticsLabel: AppLocalizations.of(context)!.appName,
               ),
-              semanticsLabel: AppLocalizations.of(context)!.appName,
-            ),
             Text(
               AppLocalizations.of(context)!.history,
               style: const TextStyle(fontWeight: FontWeight.w600),
