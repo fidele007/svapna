@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'សប្តិ — Svapna',
+      title: 'Svapna — សប្តិ',
       locale: languageProvider.locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -49,13 +49,15 @@ class MyApp extends StatelessWidget {
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         colorSchemeSeed: Colors.deepPurple,
-        fontFamily: 'Kantumruy Pro',
+        fontFamily: 'Inter',
+        fontFamilyFallback: ['Kantumruy Pro'],
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
         colorSchemeSeed: Colors.deepPurple,
-        fontFamily: 'Kantumruy Pro',
+        fontFamily: 'Inter',
+        fontFamilyFallback: ['Kantumruy Pro'],
       ),
       home: const App(),
     );

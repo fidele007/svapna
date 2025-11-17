@@ -37,7 +37,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width >= 850;
-    final shouldExtend = MediaQuery.of(context).size.width >= 1500;
+    final shouldExtend = MediaQuery.of(context).size.width >= 1200;
 
     return Scaffold(
       body: Row(
@@ -52,8 +52,12 @@ class _AppState extends State<App> {
                 children: [
                   SvgPicture.asset(
                     'assets/svapna.svg',
-                    width: 45,
-                    color: Theme.of(context).colorScheme.primary,
+                    width: 40,
+                    colorFilter: ColorFilter.mode(
+                      Theme.of(context).colorScheme.primary,
+                      BlendMode.srcIn,
+                    ),
+                    semanticsLabel: AppLocalizations.of(context)!.appName,
                   ),
                   if (shouldExtend)
                     Text(

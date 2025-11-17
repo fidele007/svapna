@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:svapna/i18n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
 import 'package:svapna/providers/history_provider.dart';
 import 'package:svapna/styles/styles.dart';
-import 'package:svapna/widgets/shared_app_bar.dart';
+import 'package:svapna/widgets/search_app_bar.dart';
 
 import 'dream_detail_screen.dart';
 
@@ -19,6 +20,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen>
     with AutomaticKeepAliveClientMixin {
+  final SearchController _searchController = SearchController();
   @override
   bool get wantKeepAlive => true;
 
@@ -27,10 +29,26 @@ class _HistoryScreenState extends State<HistoryScreen>
     super.build(context);
 
     return Scaffold(
-      appBar: SharedAppBar(
-        title: Text(
-          AppLocalizations.of(context)!.history,
-          style: const TextStyle(fontWeight: FontWeight.w600),
+      appBar: SearchAppBar(
+        searchController: _searchController,
+        title: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.end,
+          spacing: 8.0,
+          children: [
+            SvgPicture.asset(
+              'assets/svapna.svg',
+              width: 40,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary,
+                BlendMode.srcIn,
+              ),
+              semanticsLabel: AppLocalizations.of(context)!.appName,
+            ),
+            Text(
+              AppLocalizations.of(context)!.history,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ],
         ),
       ),
       body: Consumer<HistoryProvider>(

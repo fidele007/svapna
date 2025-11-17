@@ -7,19 +7,28 @@ import 'package:svapna/models/language.dart';
 import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/providers/theme_provider.dart';
 
-class SharedAppBar extends StatefulWidget implements PreferredSizeWidget {
+class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget? title;
+  final SearchController searchController;
+  final Function(String)? onSearch;
+  final Function(BuildContext, SearchController)? onSuggestions;
 
-  const SharedAppBar({super.key, this.title});
+  const SearchAppBar({
+    super.key,
+    required this.searchController,
+    this.title,
+    this.onSearch,
+    this.onSuggestions,
+  });
 
   @override
-  State<SharedAppBar> createState() => _SharedAppBarState();
+  State<SearchAppBar> createState() => _SearchAppBarState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _SharedAppBarState extends State<SharedAppBar> {
+class _SearchAppBarState extends State<SearchAppBar> {
   late ThemeMode _currentThemeMode;
 
   @override
@@ -33,8 +42,39 @@ class _SharedAppBarState extends State<SharedAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final bool shouldHaveSearchBar = widget.onSearch != null;
     return AppBar(
-      title: widget.title,
+      leading: shouldHaveSearchBar ? widget.title : null,
+      centerTitle: shouldHaveSearchBar,
+      title: shouldHaveSearchBar
+          ? SearchAnchor.bar(
+              constraints: BoxConstraints(
+                minWidth: 0,
+                maxWidth: 600.0,
+                minHeight: 40.0,
+              ),
+              barShape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              viewShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0)),
+              onSubmitted: (value) {
+                widget.onSearch?.call(value);
+                setState(() {
+                  if (value.isNotEmpty) {
+                    widget.searchController.closeView(value);
+                  }
+                });
+              },
+              searchController: widget.searchController,
+              barHintText: AppLocalizations.of(context)!.searchDreams,
+              suggestionsBuilder: (context, controller) {
+                return widget.onSuggestions?.call(context, controller) ?? [];
+              },
+            )
+          : widget.title,
       actions: [
         MenuAnchor(
           menuChildren: <Widget>[
@@ -42,6 +82,7 @@ class _SharedAppBarState extends State<SharedAppBar> {
               (locale) => MenuItemButton(
                 onPressed: () {
                   context.read<LanguageProvider>().setLocale(locale);
+                  widget.onSearch?.call(widget.searchController.text.trim());
                 },
                 child: Text(locale.displayName),
               ),

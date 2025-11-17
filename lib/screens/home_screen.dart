@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'package:svapna/i18n/app_localizations.dart';
@@ -7,7 +8,7 @@ import 'package:svapna/models/dream.dart';
 import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/services/dream_service.dart';
 import 'package:svapna/styles/styles.dart';
-import 'package:svapna/widgets/shared_app_bar.dart';
+import 'package:svapna/widgets/search_app_bar.dart';
 
 import 'dream_detail_screen.dart';
 
@@ -23,14 +24,12 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   bool get wantKeepAlive => true;
 
-  final SearchController _searchController = SearchController();
-
-  final double minSearchBarHeight = 50.0;
-
   List<Dream> _allDreams = [];
   List<Dream> _filteredDreams = [];
 
-  LanguageProvider? languageProvider;
+  final SearchController _searchController = SearchController();
+
+  late final LanguageProvider languageProvider;
 
   @override
   void initState() {
@@ -40,18 +39,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       languageProvider = context.read<LanguageProvider>();
-      languageProvider!.addListener(onLanguageChanged);
-    });
-  }
-
-  void loadDreams() {
-    final languageCode = context.read<LanguageProvider>().locale.languageCode;
-    DreamService.getDreams(languageCode).then((completeDreamList) {
-      setState(() {
-        _allDreams = completeDreamList;
-        _filteredDreams =
-            filterDreams(completeDreamList, _searchController.text.trim());
-      });
+      languageProvider.addListener(onLanguageChanged);
     });
   }
 
@@ -62,79 +50,68 @@ class _HomeScreenState extends State<HomeScreen>
     final isWide = MediaQuery.of(context).size.width >= 850;
 
     return Scaffold(
-      appBar: SharedAppBar(
+      appBar: SearchAppBar(
+        searchController: _searchController,
         title: isWide
             ? null
-            : Text(
-                'សប្តិ — Svapna',
-                style: const TextStyle(fontWeight: FontWeight.w600),
+            : Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: SvgPicture.asset(
+                  'assets/svapna.svg',
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).colorScheme.primary,
+                    BlendMode.srcIn,
+                  ),
+                  semanticsLabel: AppLocalizations.of(context)!.appName,
+                ),
               ),
+        onSearch: (value) {
+          final filteredDreams = filterDreams(_allDreams, value);
+          setState(() {
+            _filteredDreams = filteredDreams;
+          });
+        },
+        onSuggestions: (context, controller) {
+          return filterDreams(_allDreams, controller.text.trim())
+              .map((dream) => ListTile(
+                    title: Text(dream.name),
+                    onTap: () {
+                      onDreamTap(dream);
+                    },
+                  ))
+              .toList();
+        },
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.center,
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: [
-                SearchAnchor.bar(
-                  constraints: BoxConstraints(
-                    minWidth: 0,
-                    maxWidth: 600.0,
-                    minHeight: minSearchBarHeight,
-                  ),
-                  onSubmitted: (value) {
-                    final filteredDreams = filterDreams(_allDreams, value);
-                    setState(() {
-                      _filteredDreams = filteredDreams;
-                      if (value.isNotEmpty) {
-                        _searchController.closeView(value);
-                      }
-                    });
-                  },
-                  searchController: _searchController,
-                  barHintText: AppLocalizations.of(context)!.searchDreams,
-                  // barPadding: const WidgetStatePropertyAll<EdgeInsets>(
-                  //     EdgeInsets.symmetric(horizontal: 16)),
-                  suggestionsBuilder: (context, controller) {
-                    return filterDreams(_allDreams, controller.text.trim())
-                        .map((dream) => ListTile(
-                              title: Text(dream.name),
-                              onTap: () {
-                                onDreamTap(dream);
-                              },
-                            ))
-                        .toList();
-                  },
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: _filteredDreams.isEmpty
                 ? Center(
                     child: Text(AppLocalizations.of(context)!.searchEmpty),
                   )
-                : ListView.builder(
-                    itemCount: _filteredDreams.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          _filteredDreams[index].name,
-                          style: AppStyle.listTitleStyle(context),
-                        ),
-                        subtitle: Text(
-                          _filteredDreams[index].plainTextDefinition ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppStyle.listSubtitleStyle(context),
-                        ),
-                        onTap: () => onDreamTap(_filteredDreams[index]),
-                      );
-                    },
+                : Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 800.0),
+                      child: ListView.builder(
+                        itemCount: _filteredDreams.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              _filteredDreams[index].name,
+                              style: AppStyle.listTitleStyle(context),
+                            ),
+                            subtitle: Text(
+                              _filteredDreams[index].plainTextDefinition ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppStyle.listSubtitleStyle(context),
+                            ),
+                            onTap: () => onDreamTap(_filteredDreams[index]),
+                          );
+                        },
+                      ),
+                    ),
                   ),
           ),
         ],
@@ -156,6 +133,19 @@ class _HomeScreenState extends State<HomeScreen>
     return filteredDreams;
   }
 
+  void loadDreams() {
+    final languageCode = context.read<LanguageProvider>().locale.languageCode;
+    DreamService.getDreams(languageCode).then((completeDreamList) {
+      setState(() {
+        _allDreams = completeDreamList;
+        _filteredDreams = filterDreams(
+          completeDreamList,
+          _searchController.text.trim(),
+        );
+      });
+    });
+  }
+
   void onDreamTap(Dream dream) {
     Navigator.push(
       context,
@@ -165,15 +155,15 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  void onLanguageChanged() {
-    loadDreams();
-  }
-
   @override
   void dispose() {
-    languageProvider?.removeListener(onLanguageChanged);
-    languageProvider?.dispose();
+    languageProvider.removeListener(onLanguageChanged);
+    languageProvider.dispose();
 
     super.dispose();
+  }
+
+  void onLanguageChanged() {
+    loadDreams();
   }
 }
