@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'package:svapna/i18n/app_localizations.dart';
+import 'package:svapna/l10n/app_localizations.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});

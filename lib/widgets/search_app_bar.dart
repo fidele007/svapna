@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:svapna/i18n/app_localizations.dart';
+import 'package:svapna/l10n/app_localizations.dart';
 import 'package:svapna/models/language.dart';
 import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/providers/theme_provider.dart';

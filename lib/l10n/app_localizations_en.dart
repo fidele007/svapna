@@ -24,7 +24,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookmarks => 'Bookmarks';
 
   @override
-  String get bookmarksEmpty => 'Your dream shelf is empty. Go catch a few to keep!';
+  String get bookmarksEmpty =>
+      'Your dream shelf is empty. Go catch a few to keep!';
 
   @override
   String get settings => 'Settings';
@@ -33,16 +34,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchDreams => 'Search Dreams';
 
   @override
-  String get searchEmpty => 'No dreams found — maybe they’re still asleep... 😴';
+  String get searchEmpty =>
+      'No dreams found — maybe they’re still asleep... 😴';
 
   @override
   String get about => 'About';
 
   @override
-  String get aboutApp1 => 'Dreams are often seen as a form of prophecy, revealing insights about one’s life after waking and even foreshadowing future events. They play an important role in daily life, often serving as guiding signs that help people make thoughtful decisions before taking action.';
+  String get aboutApp1 =>
+      'Dreams are often seen as a form of prophecy, revealing insights about one’s life after waking and even foreshadowing future events. They play an important role in daily life, often serving as guiding signs that help people make thoughtful decisions before taking action.';
 
   @override
-  String get aboutApp2 => 'This app makes it easy to explore the meanings and interpretations of your dreams, with a comprehensive collection of over 20,000 dream definitions.';
+  String get aboutApp2 =>
+      'This app makes it easy to explore the meanings and interpretations of your dreams, with a comprehensive collection of over 20,000 dream definitions.';
 
   @override
   String get developedWithBy => 'Developed with 💖 by Force Fidele KIEN';

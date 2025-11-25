@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:svapna/i18n/app_localizations.dart';
+import 'package:svapna/l10n/app_localizations.dart';
 import 'package:svapna/models/dream.dart';
 import 'package:svapna/providers/language_provider.dart';
 import 'package:svapna/services/dream_service.dart';
