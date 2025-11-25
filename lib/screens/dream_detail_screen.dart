@@ -37,7 +37,7 @@ class _DreamDetailScreenState extends State<DreamDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
+          title: SelectableText(
             widget.dream.name,
             style: Theme.of(context)
                 .textTheme
@@ -78,9 +78,11 @@ class _DreamDetailScreenState extends State<DreamDetailScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: HtmlWidget(
-            widget.dream.definition,
-            textStyle: Theme.of(context).textTheme.bodyLarge,
+          child: SelectionArea(
+            child: HtmlWidget(
+              widget.dream.definition,
+              textStyle: Theme.of(context).textTheme.bodyLarge,
+            ),
           ),
         ),
       ),
