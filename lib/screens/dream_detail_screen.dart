@@ -10,6 +10,8 @@ import 'package:svapna/providers/bookmarks_provider.dart';
 import 'package:svapna/providers/history_provider.dart';
 
 class DreamDetailScreen extends StatefulWidget {
+  static const routeName = '/dream-detail';
+
   final Dream dream;
 
   const DreamDetailScreen({super.key, required this.dream});

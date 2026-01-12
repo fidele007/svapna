@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:provider/provider.dart';
 
 import 'package:svapna/l10n/app_localizations.dart';
@@ -13,6 +14,8 @@ import 'package:svapna/widgets/search_app_bar.dart';
 import 'dream_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const routeName = '/home';
+
   const HomeScreen({super.key});
 
   @override
@@ -30,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen>
   final SearchController _searchController = SearchController();
 
   late final LanguageProvider languageProvider;
+
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -49,74 +54,94 @@ class _HomeScreenState extends State<HomeScreen>
 
     final isWide = MediaQuery.of(context).size.width >= 850;
 
-    return Scaffold(
-      appBar: SearchAppBar(
-        searchController: _searchController,
-        title: isWide
-            ? null
-            : Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: SvgPicture.asset(
-                  'assets/svapna.svg',
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context).colorScheme.primary,
-                    BlendMode.srcIn,
-                  ),
-                  semanticsLabel: AppLocalizations.of(context)!.appName,
+    return Navigator(
+        key: _navigatorKey,
+        initialRoute: HomeScreen.routeName,
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case DreamDetailScreen.routeName:
+              return MaterialPageRoute(
+                builder: (context) => DreamDetailScreen(
+                  dream: settings.arguments as Dream,
                 ),
-              ),
-        onSearch: (value) {
-          final filteredDreams = filterDreams(_allDreams, value);
-          setState(() {
-            _filteredDreams = filteredDreams;
-          });
-        },
-        onSuggestions: (context, controller) {
-          return filterDreams(_allDreams, controller.text.trim())
-              .map((dream) => ListTile(
-                    title: Text(dream.name),
-                    onTap: () {
-                      onDreamTap(dream);
+              );
+            case HomeScreen.routeName:
+            default:
+              return MaterialPageRoute(
+                builder: (context) => Scaffold(
+                  appBar: SearchAppBar(
+                    searchController: _searchController,
+                    title: isWide
+                        ? null
+                        : Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: SvgPicture.asset(
+                              'assets/svapna.svg',
+                              colorFilter: ColorFilter.mode(
+                                Theme.of(context).colorScheme.primary,
+                                BlendMode.srcIn,
+                              ),
+                              semanticsLabel:
+                                  AppLocalizations.of(context)!.appName,
+                            ),
+                          ),
+                    onSearch: (value) {
+                      final filteredDreams = filterDreams(_allDreams, value);
+                      setState(() {
+                        _filteredDreams = filteredDreams;
+                      });
                     },
-                  ))
-              .toList();
-        },
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _filteredDreams.isEmpty
-                ? Center(
-                    child: Text(AppLocalizations.of(context)!.searchEmpty),
-                  )
-                : Align(
-                    alignment: Alignment.topCenter,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 800.0),
-                      child: ListView.builder(
-                        itemCount: _filteredDreams.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(
-                              _filteredDreams[index].name,
-                              style: AppStyle.listTitleStyle(context),
-                            ),
-                            subtitle: Text(
-                              _filteredDreams[index].plainTextDefinition ?? '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppStyle.listSubtitleStyle(context),
-                            ),
-                            onTap: () => onDreamTap(_filteredDreams[index]),
-                          );
-                        },
-                      ),
-                    ),
+                    onSuggestions: (context, controller) {
+                      return filterDreams(_allDreams, controller.text.trim())
+                          .map((dream) => ListTile(
+                                title: Text(dream.name),
+                                onTap: () {
+                                  onDreamTap(dream);
+                                },
+                              ))
+                          .toList();
+                    },
                   ),
-          ),
-        ],
-      ),
-    );
+                  body: Column(
+                    children: [
+                      Expanded(
+                        child: _filteredDreams.isEmpty
+                            ? Center(
+                                child: Text(
+                                    AppLocalizations.of(context)!.searchEmpty),
+                              )
+                            : Align(
+                                alignment: Alignment.topCenter,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(maxWidth: 800.0),
+                                  child: ListView.builder(
+                                    itemCount: _filteredDreams.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        title: Text(
+                                          _filteredDreams[index].name,
+                                          style:
+                                              AppStyle.listTitleStyle(context),
+                                        ),
+                                        subtitle: HtmlWidget(
+                                          '<div style="max-lines:1;text-overflow:ellipsis;">${_filteredDreams[index].plainTextDefinition ?? ''}</div>',
+                                          textStyle: AppStyle.listSubtitleStyle(
+                                              context),
+                                        ),
+                                        onTap: () =>
+                                            onDreamTap(_filteredDreams[index]),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+          }
+        });
   }
 
   static List<Dream> filterDreams(List<Dream> dreamList, String query) {
@@ -147,12 +172,8 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void onDreamTap(Dream dream) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DreamDetailScreen(dream: dream),
-      ),
-    );
+    _navigatorKey.currentState!
+        .pushNamed(DreamDetailScreen.routeName, arguments: dream);
   }
 
   @override
