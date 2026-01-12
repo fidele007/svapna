@@ -56,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen>
 
     return Navigator(
         key: _navigatorKey,
-        initialRoute: HomeScreen.routeName,
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case DreamDetailScreen.routeName:

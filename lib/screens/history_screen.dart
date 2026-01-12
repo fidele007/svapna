@@ -12,6 +12,8 @@ import 'package:svapna/widgets/search_app_bar.dart';
 import 'dream_detail_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
+  static const routeName = '/history';
+
   const HistoryScreen({super.key});
 
   @override
@@ -24,69 +26,87 @@ class _HistoryScreenState extends State<HistoryScreen>
   @override
   bool get wantKeepAlive => true;
 
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     final isWide = MediaQuery.of(context).size.width >= 850;
 
-    return Scaffold(
-      appBar: SearchAppBar(
-        searchController: _searchController,
-        title: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.end,
-          spacing: 8.0,
-          children: [
-            if (!isWide)
-              SvgPicture.asset(
-                'assets/svapna.svg',
-                width: 40,
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.primary,
-                  BlendMode.srcIn,
-                ),
-                semanticsLabel: AppLocalizations.of(context)!.appName,
+    return Navigator(
+      key: _navigatorKey,
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case DreamDetailScreen.routeName:
+            return MaterialPageRoute(
+              builder: (context) => DreamDetailScreen(
+                dream: settings.arguments as Dream,
               ),
-            Text(
-              AppLocalizations.of(context)!.history,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-      body: Consumer<HistoryProvider>(
-        builder: (context, historyProvider, child) {
-          List<Dream> recentDreams = historyProvider.history;
-          return recentDreams.isEmpty
-              ? Center(child: Text(AppLocalizations.of(context)!.historyEmpty))
-              : ListView.builder(
-                  itemCount: recentDreams.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        recentDreams[index].name,
-                        style: AppStyle.listTitleStyle(context),
-                      ),
-                      subtitle: Text(
-                        recentDreams[index].plainTextDefinition ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppStyle.listSubtitleStyle(context),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DreamDetailScreen(dream: recentDreams[index]),
+            );
+          case HistoryScreen.routeName:
+          default:
+            return MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: SearchAppBar(
+                  searchController: _searchController,
+                  title: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.end,
+                    spacing: 8.0,
+                    children: [
+                      if (!isWide)
+                        SvgPicture.asset(
+                          'assets/svapna.svg',
+                          width: 40,
+                          colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
+                            BlendMode.srcIn,
                           ),
-                        );
-                      },
-                    );
+                          semanticsLabel: AppLocalizations.of(context)!.appName,
+                        ),
+                      Text(
+                        AppLocalizations.of(context)!.history,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+                body: Consumer<HistoryProvider>(
+                  builder: (context, historyProvider, child) {
+                    List<Dream> recentDreams = historyProvider.history;
+                    return recentDreams.isEmpty
+                        ? Center(
+                            child: Text(
+                                AppLocalizations.of(context)!.historyEmpty))
+                        : ListView.builder(
+                            itemCount: recentDreams.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(
+                                  recentDreams[index].name,
+                                  style: AppStyle.listTitleStyle(context),
+                                ),
+                                subtitle: Text(
+                                  recentDreams[index].plainTextDefinition ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppStyle.listSubtitleStyle(context),
+                                ),
+                                onTap: () {
+                                  _navigatorKey.currentState!.pushNamed(
+                                    DreamDetailScreen.routeName,
+                                    arguments: recentDreams[index],
+                                  );
+                                },
+                              );
+                            },
+                          );
                   },
-                );
-        },
-      ),
+                ),
+              ),
+            );
+        }
+      },
     );
   }
 }
